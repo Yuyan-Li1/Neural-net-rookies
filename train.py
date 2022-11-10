@@ -1,37 +1,33 @@
 import torch
 import torch.nn.functional as functional
-import torchvision
+from torch.utils.data import DataLoader
 
+from dataset import VideoData
 from models import ThreeNet
 
-n_epochs = 3
+n_epochs = 1000
 batch_size_train = 64
 batch_size_test = 1000
 learning_rate = 0.001
 momentum = 0.5
 log_interval = 10
+train_img_set = '2'
+test_img_set = '1'
 
 random_seed = 1
-torch.backends.cudnn.enabled = False
 torch.manual_seed(random_seed)
 
-train_loader = torch.utils.data.DataLoader(
-    torchvision.datasets.MNIST('step_images/train', train=True, download=True,
-                               transform=torchvision.transforms.Compose([
-                                   torchvision.transforms.ToTensor(),
-                                   torchvision.transforms.Normalize(
-                                       (0.1307,), (0.3081,))
-                               ])),
-    batch_size=batch_size_train, shuffle=True)
+train_loader = DataLoader(
+    dataset=VideoData(mode='train', image_set=train_img_set),
+    batch_size=batch_size_train,
+    shuffle=True
+)
 
-test_loader = torch.utils.data.DataLoader(
-    torchvision.datasets.MNIST('step_images/test', train=False, download=True,
-                               transform=torchvision.transforms.Compose([
-                                   torchvision.transforms.ToTensor(),
-                                   torchvision.transforms.Normalize(
-                                       (0.1307,), (0.3081,))
-                               ])),
-    batch_size=batch_size_test, shuffle=True)
+test_loader = DataLoader(
+    dataset=VideoData(mode='test', image_set=test_img_set),
+    batch_size=batch_size_test,
+    shuffle=True
+)
 
 network = ThreeNet()
 optimizer = torch.optim.SGD(network.parameters(), lr=learning_rate,
