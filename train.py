@@ -76,6 +76,9 @@ def test():
 
 
 test()
+print(f'inital test')
 for epoch in range(1, n_epochs + 1):
     train(epoch)
+    print(f'train successful {epoch}')
     test()
+    print(f'test successful {epoch}')
