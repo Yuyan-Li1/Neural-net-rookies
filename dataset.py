@@ -4,12 +4,12 @@ import os
 import numpy as np
 from PIL import Image
 from torch.utils.data import Dataset
+from torchvision import transforms
 
 
 class VideoData(Dataset):
     def __init__(self, mode='train', image_set='2'):
-        self.root = f'step_images/train/STEP-ICCV21-0{image_set}' if mode == 'train' else f'step_images/test/STEP' \
-                                                                                          f'-ICCV21-0{image_set} '
+        self.root = f'breakup_set/train' if mode == 'train' else f'breakup_set/test'
         self.length = 0
         self.dataset = self.load_data()
 
@@ -18,6 +18,7 @@ class VideoData(Dataset):
 
     def __getitem__(self, item):
         img, gt = self.dataset[item]
+        # print('got item')
         return img, gt
 
     def load_data(self):
@@ -31,8 +32,10 @@ class VideoData(Dataset):
                 if not os.path.exists(img_path) or not os.path.exists(gt_path):
                     raise IOError("{} does not exist".format(img_path))
                 img = Image.open(img_path).convert('RGB')
+                trans = transforms.Compose([transforms.ToTensor()])
+                img_tensor = trans(img)
                 with open(gt_path) as gt_file:
                     gt = np.asarray(json.load(gt_file))
-                dataset.append([img, gt])
+                dataset.append([img_tensor, gt])
                 self.length += 1
         return dataset
