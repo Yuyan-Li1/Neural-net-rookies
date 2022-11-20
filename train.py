@@ -6,8 +6,8 @@ from dataset import VideoData
 from models import ThreeNet
 
 n_epochs = 1000
-batch_size_train = 64
-batch_size_test = 1000
+batch_size_train = 300
+batch_size_test = 562
 learning_rate = 0.001
 momentum = 0.5
 log_interval = 10
@@ -18,13 +18,13 @@ random_seed = 1
 torch.manual_seed(random_seed)
 
 train_loader = DataLoader(
-    dataset=VideoData(mode='train', image_set=train_img_set),
+    dataset=VideoData(mode='train'),
     batch_size=batch_size_train,
     shuffle=True
 )
 
 test_loader = DataLoader(
-    dataset=VideoData(mode='test', image_set=test_img_set),
+    dataset=VideoData(mode='test'),
     batch_size=batch_size_test,
     shuffle=True
 )
