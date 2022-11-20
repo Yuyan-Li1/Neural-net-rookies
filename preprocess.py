@@ -150,7 +150,14 @@ def main():
 
     # Check if augmentation dir exists
     if os.path.exists(augment_dir):
-        shutil.rmtree(augment_dir)
+        choice = ""
+        while choice.upper() not in ["Y", "N"]:
+            choice = input("Augmentation Dir Already Exists: Do you want to delete it (Y/N)? ")
+        if choice.upper() == "Y":
+            shutil.rmtree(augment_dir)
+        else:
+            print("Exiting")
+            exit()
 
     os.mkdir(augment_dir)
 
